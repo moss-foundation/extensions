@@ -1,0 +1,3 @@
+[submodule "extensions/test-sapic-extension"]
+	path = extensions/test-sapic-extension
+	url = https://github.com/brutusyhy/test-sapic-extension
