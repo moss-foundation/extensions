@@ -25,7 +25,7 @@ def publish_extension(manifest: Dict, artifact: Path):
     (min_app_major, min_app_minor, min_app_patch) = parse_semver(manifest["minAppVersion"])
 
     metadata = {
-        'extensionId': manifest["identifier"],
+        'externalId': manifest["identifier"],
         'name': manifest["name"],
         'authors': manifest["authors"],
         'description': manifest["description"],
