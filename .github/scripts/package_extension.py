@@ -83,9 +83,6 @@ def main():
     parser.add_argument("path", help="Path to the extension submodule")
     args = parser.parse_args()
 
-    # FIXME: Remove
-    print(os.listdir())
-
     # TODO: Validate extension
     extension_path = Path(args.path)
     manifest_path = extension_path / MANIFEST_FILE
