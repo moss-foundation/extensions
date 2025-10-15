@@ -15,7 +15,7 @@ def check_updated_submodules(base: str) -> list[str]:
             text=True,
             check=True
         )
-        return process.stdout.strip().splitlines()
+        return [path for path in process.stdout.strip().splitlines() if path.startswith("extensions/")]
     except subprocess.CalledProcessError as e:
         print(f"Error executing git command: {e}")
         print(f"Stderr: {e.stderr}")
