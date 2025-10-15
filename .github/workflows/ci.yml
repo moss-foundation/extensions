@@ -1,0 +1,68 @@
+
+name: CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, reopened, synchronize]
+
+concurrency:
+  group: "pr-publish-${{ github.event.pull_request.number }}"
+  cancel-in-progress: false
+
+jobs:
+  # This workflow contains a single job called "build"
+  check-updated-submodules:
+    name: Check updated submodules
+    runs-on: ubuntu-latest
+    outputs:
+      UPDATED_SUBMODULES: ${{steps.output-submodules.outputs.UPDATED_SUBMODULES}}
+    timeout-minutes: 5
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout Code
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0 # full history, needed for diff
+          ref: ${{ github.head_ref }}
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6.8.0
+
+      - name: Check Updated Submodules
+        id: output-submodules
+        run: uv run .github/scripts/check_updated_submodules.py ${{ github.event.pull_request.base.sha }}
+
+
+  publish:
+    name: Publish - ${{ matrix.submodule }} (manual approval required)
+    needs: check-updated-submodules
+    runs-on: ubuntu-latest
+    environment: publish
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+    strategy:
+      matrix:
+        submodule: ${{fromJSON(needs.check-modified-submodules.outputs.UPDATED_SUBMODULES)}}
+
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout Code
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0 # full history, needed for diff
+          ref: ${{ github.head_ref }}
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6.8.0
+
+      - name: Package and Publish Extension
+        run: uv run .github/scripts/package_extension.py ${{matrix.submodule}}

@@ -77,13 +77,13 @@ def build_extension(manifest: Dict, extension_path: Path) -> Path:
 
 def main():
     parser = argparse.ArgumentParser(
-        prog="Build Extension",
-        description="Build extension at the given submodule path",
+        prog="Package extension",
+        description="Build extension at the given submodule path and publish it",
     )
     parser.add_argument("path", help="Path to the extension submodule")
     args = parser.parse_args()
 
-    # TODO
+    # TODO: Validate extension
     extension_path = Path(args.path)
     manifest_path = extension_path / MANIFEST_FILE
     manifest = json.load(manifest_path.open())

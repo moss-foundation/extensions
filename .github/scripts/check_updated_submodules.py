@@ -1,4 +1,8 @@
+# TODO: Put to .github folder
+
 import argparse
+import json
+import os
 import subprocess
 
 def check_updated_submodules(base: str) -> list[str]:
@@ -19,11 +23,17 @@ def check_updated_submodules(base: str) -> list[str]:
 
 def main():
     parser = argparse.ArgumentParser(
-        prog='CI',
-        description='Check and publish updated submodules',
+        prog='Check updated submodules',
+        description='List all updated submodules',
     )
     parser.add_argument("base", help="Base commit to compare against")
-    check_updated_submodules(parser.parse_args().base)
+    updated_submodules = check_updated_submodules(parser.parse_args().base)
+
+    print(updated_submodules)
+
+    json_output = json.dumps(updated_submodules)
+    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+        fh.write(f'UPDATED_SUBMODULES={json_output}\n')
 
 
 if __name__ == "__main__":

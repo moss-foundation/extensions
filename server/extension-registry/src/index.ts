@@ -8,6 +8,7 @@
 // GET /download/:aid -> download a specific accepted-version artifact by artifact_id
 
 
+// TODO: Authentication
 
 interface Env {
 	db: D1Database;
