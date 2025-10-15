@@ -47,7 +47,7 @@ jobs:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
     strategy:
       matrix:
-        submodule: ${{fromJSON(needs.check-modified-submodules.outputs.UPDATED_SUBMODULES)}}
+        submodule: ${{fromJSON(needs.check-updated-submodules.outputs.UPDATED_SUBMODULES)}}
 
     steps:
       - name: Harden the runner (Audit all outbound calls)
