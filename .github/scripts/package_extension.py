@@ -51,7 +51,7 @@ def publish_extension(manifest: Dict, artifact: Path):
     response = requests.post(f"{REGISTRY_URL}/publish", data=data, files=files)
 
     if response.status_code == 201:
-        print(f"Successfully published extension {manifest['identifier']}-{manifest["version"]}")
+        print(f"Successfully published extension {manifest['identifier']}-{manifest['version']}")
     else:
         print(f"Failed to publish extension {manifest['identifier']}-{manifest['version']}")
         print(response.json())
