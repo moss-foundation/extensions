@@ -10,6 +10,7 @@ from typing import Dict
 
 MANIFEST_FILE = "Sapic.json"
 REGISTRY_URL = os.getenv("REGISTRY_URL")
+API_KEY = os.getenv("API_KEY")
 
 semver_regex = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$"
 
@@ -48,7 +49,11 @@ def publish_extension(manifest: Dict, artifact: Path):
         "file": open(artifact, "rb"),
     }
 
-    response = requests.post(f"{REGISTRY_URL}/extensions", data=data, files=files)
+    headers = {
+        "Authorization": f"Bearer {API_KEY}"
+    }
+
+    response = requests.post(f"{REGISTRY_URL}/extensions", data=data, files=files, headers=headers)
 
     if response.status_code == 201:
         print(f"Successfully published extension {manifest['identifier']}-{manifest['version']}")

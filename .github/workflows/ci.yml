@@ -45,6 +45,7 @@ jobs:
     environment: publish
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      API_KEY: ${{ secrets.API_KEY }}
     strategy:
       matrix:
         submodule: ${{fromJSON(needs.check-updated-submodules.outputs.UPDATED_SUBMODULES)}}
