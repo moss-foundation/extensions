@@ -9,7 +9,8 @@ from pathlib import Path
 from typing import Dict
 
 MANIFEST_FILE = "Sapic.json"
-REGISTRY_URL = os.getenv("REGISTRY_URL")
+REGISTRY_URL_DEV = os.getenv("REGISTRY_URL_DEV")
+REGISTRY_URL_PROD = os.getenv("REGISTRY_URL_PROD")
 API_KEY = os.getenv("API_KEY")
 
 semver_regex = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$"
@@ -53,12 +54,22 @@ def publish_extension(manifest: Dict, artifact: Path):
         "Authorization": f"Bearer {API_KEY}"
     }
 
-    response = requests.post(f"{REGISTRY_URL}/extensions", data=data, files=files, headers=headers)
+    # Publishing the extension to both dev and prod registry
+    response = requests.post(f"{REGISTRY_URL_DEV}/extensions", data=data, files=files, headers=headers)
 
     if response.status_code == 201:
-        print(f"Successfully published extension {manifest['identifier']}-{manifest['version']}")
+        print(f"Successfully published extension {manifest['identifier']}-{manifest['version']} to dev registry")
     else:
-        print(f"Failed to publish extension {manifest['identifier']}-{manifest['version']}")
+        print(f"Failed to publish extension {manifest['identifier']}-{manifest['version']} to dev registry")
+        print(response.json())
+        exit(1)
+
+    response = requests.post(f"{REGISTRY_URL_PROD}/extensions", data=data, files=files, headers=headers)
+
+    if response.status_code == 201:
+        print(f"Successfully published extension {manifest['identifier']}-{manifest['version']} to prod registry")
+    else:
+        print(f"Failed to publish extension {manifest['identifier']}-{manifest['version']} to prod registry")
         print(response.json())
         exit(1)
 
