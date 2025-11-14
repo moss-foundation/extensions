@@ -44,7 +44,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: publish
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      REGISTRY_URL_DEV: ${{ secrets.REGISTRY_URL_DEV }}
+      REGISTRY_URL_PROD: ${{ secrets.REGISTRY_URL_PROD }}
       API_KEY: ${{ secrets.API_KEY }}
     strategy:
       matrix:
