@@ -4,3 +4,6 @@
 [submodule "extensions/lang-de"]
 	path = extensions/lang-de
 	url = https://github.com/moss-foundation/sapic-language-pack-de
+[submodule "extensions/lang-ru"]
+	path = extensions/lang-ru
+	url = https://github.com/moss-foundation/sapic-language-pack-ru
