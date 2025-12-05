@@ -1,3 +1,6 @@
 [submodule "extensions/test-sapic-extension"]
 	path = extensions/test-sapic-extension
 	url = https://github.com/brutusyhy/test-sapic-extension
+[submodule "extensions/lang-de"]
+	path = extensions/lang-de
+	url = https://github.com/moss-foundation/sapic-language-pack-de
